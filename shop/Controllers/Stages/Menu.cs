@@ -93,13 +93,13 @@ namespace Shop.Controllers.Stages
         {
             if (session.Account == null || !session.Account.IsAccess)
                 session.Respond = "Firstly log in";
-            Console.Write("Type id of product ->");
+            Console.Write("Type id of product -> ");
             int id = int.Parse(Console.ReadLine());
             ProductTable pt = new ProductTable();
             Product product = pt.Get(id);
             new Operation().Buy(session.Account, product);
             pt.Remove(id);
-            session.Respond = $"You buy {product.GetShortInfo}";
+            session.Respond = $"You buy {product.GetShortInfo()}";
         }
 
         private void SeeProduct(Session session)

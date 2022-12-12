@@ -7,13 +7,24 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic
 {
-    
+
+    public class ProductDTO
+    {
+        public int Id { get; set; }
+        public long Price { get; set; }
+        public string Name { get; set; }
+        public int CategoryId { get; set; }
+        public string Description { get; set; }
+        public int SellerId { get; set; }
+
+    }
+
     public class Product
     {
         public static readonly List<string> Categories = new CategoryTable().Get();
         public int Id { get; }
-        private decimal _price;
-        public decimal Price
+        private long _price;
+        public long Price
         {
             get { return _price; }
             set
@@ -27,26 +38,15 @@ namespace Shop.Logic
         public string Description { get; set; }
         public int SellerId { get; }
 
-        public Product(int id, string name, decimal price, int categoryId, string description, int sellerId)
+        public Product(ProductDTO product)
         {
-            Id = id;
-            Price = price;
-            Name = name;
-            Description = description;
-            SellerId = sellerId;
-            CategoryId = categoryId;
+            Id = product.Id;
+            Price = product.Price;
+            Name = product.Name;
+            Description = product.Description;
+            SellerId = product.SellerId;
+            CategoryId = product.CategoryId;
         }
-
-        public Product(int id, string name, decimal price, int categoryId, int sellerId)
-        {
-            Id = id;
-            Price = price;
-            Name = name;
-            Description = "";
-            SellerId = sellerId;
-            CategoryId = categoryId;
-        }
-
 
         public string GetShortInfo() 
         {
@@ -75,8 +75,7 @@ namespace Shop.Logic
         {
             throw new NotImplementedException();
         }
+
     }
-
-
 
 }

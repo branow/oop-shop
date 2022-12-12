@@ -3,9 +3,11 @@ using Shop.Logic;
 using Shop.Logic.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Shop.Logic.Data.Tables
 {
@@ -18,10 +20,17 @@ namespace Shop.Logic.Data.Tables
         {
         }
 
-        public Product Create(string name, decimal price, int categoryId, int sellerId, string description = "")
+        public Product Create(string name, long price, int categoryId, int sellerId, string description = "")
         {
             int id = Insert(name, price, categoryId, description, sellerId);
-            return new Product(id, name, price, categoryId, description, sellerId);
+            ProductDTO product = new ProductDTO();
+            product.Id = id;
+            product.Name = name;
+            product.Price = price;
+            product.CategoryId = categoryId;
+            product.SellerId = sellerId;
+            product.Description = description;
+            return new Product(product);
         }
 
         public List<Product> Get()
@@ -30,9 +39,14 @@ namespace Shop.Logic.Data.Tables
             MySqlDataReader reader = Select();
             while (reader.Read())
             {
-                Product product = new Product(reader.GetInt32(s_id), reader.GetString(s_name), reader.GetDecimal(s_price),
-                        reader.GetInt32(s_category), reader.GetString(s_description), reader.GetInt32(s_seller));
-                list.Add(product);
+                ProductDTO product = new ProductDTO();
+                product.Id = reader.GetInt32(s_id);
+                product.Name = reader.GetString(s_name);
+                product.Price = reader.GetInt64(s_price);
+                product.CategoryId = reader.GetInt32(s_category);
+                product.SellerId = reader.GetInt32(s_seller);
+                product.Description = reader.GetString(s_description);
+                list.Add(new Product(product));
             }
             reader.Close();
             return list;
@@ -42,10 +56,15 @@ namespace Shop.Logic.Data.Tables
         {
             MySqlDataReader reader = Select(new Condition(new DataField(s_id, id)));
             reader.Read();
-            Product product = new Product(reader.GetInt32(s_id), reader.GetString(s_name), reader.GetDecimal(s_price),
-                       reader.GetInt32(s_category), reader.GetString(s_description), reader.GetInt32(s_seller));
+            ProductDTO product = new ProductDTO();
+            product.Id = reader.GetInt32(s_id);
+            product.Name = reader.GetString(s_name);
+            product.Price = reader.GetInt64(s_price);
+            product.CategoryId = reader.GetInt32(s_category);
+            product.SellerId = reader.GetInt32(s_seller);
+            product.Description = reader.GetString(s_description);
             reader.Close();
-            return product;
+            return new Product(product);
         }
 
         public void Update(Product product)

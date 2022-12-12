@@ -2,6 +2,17 @@
 
 namespace Shop.Logic
 {
+    public class AccountDTO 
+    { 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public long Balance { get; set; }
+        public List<string> History { get; set; }
+        public bool Access { get; set; }
+    }
+
     public class Account
     {
         public int Id { get; }
@@ -32,51 +43,30 @@ namespace Shop.Logic
                 else throw AccessError();
             }
         }
-        public decimal Balance { get { return _balance; } }
+        public long Balance { get { return _balance; } }
         public List<string> History { get { return _history; } }
-        public bool IsAccess { get { return _access; } }
+        public bool IsAccess { get {
+                Console.WriteLine(_access);
+                return _access; } }
         public List<Product> Basket { get; set; }
 
         private bool _access;
-        private decimal _balance;
+        private long _balance;
         private string _name;
         private string _email;
         private string _password;
         private readonly List<string> _history;
 
-        public Account(int id, string name, string email, string password, bool access)
+        public Account(AccountDTO account)
         {
-            Id = id;
-            _name = name;
-            _email = email;
-            _password = password;
-            _balance = 0;
-            _history = new List<string>();
+            Id = account.Id;
+            _name = account.Name;
+            _email = account.Email;
+            _password = account.Password;
+            _balance = account.Balance;
+            _history = account.History;
+            _access = account.Access;
             Basket = new List<Product>();
-            _access = access;
-        }
-
-        public Account(int id, string name, string email, string password, decimal balance, List<string> history)
-        {
-            Id = id;
-            Basket = new List<Product>();
-            _name = name;
-            _email = email;
-            _password = password;
-            _balance = balance;
-            _history = history;
-        }
-
-        public Account(int id, string name, string email, string password, decimal balance, List<string> history, bool access)
-        {
-            Id = id;
-            Basket = new List<Product>();
-            _name = name;
-            _email = email;
-            _password = password;
-            _balance = balance;
-            _history = history;
-            _access = access;
         }
 
         public void ExecuteTransaction(Transaction transaction)
@@ -99,7 +89,7 @@ namespace Shop.Logic
 
         public bool Open(string password)
         {
-            if (IsAccess) return true;
+            if (_access) return true;
             if (!new Hash(password).GetHash().Equals(Password)) return false;
             _access = true;
             Password = password;
@@ -108,7 +98,7 @@ namespace Shop.Logic
 
         public bool Close()
         {
-            if (!IsAccess) return true;
+            if (!_access) return true;
             Password = new Hash(Password).GetHash();
             _access = false;
             return true;

@@ -9,19 +9,19 @@ namespace Shop.Logic
 {
     public class Transaction
     {
-        public static Transaction newTransaction(decimal sum, Account receiver, Account sender, string message = "")
+        public static Transaction newTransaction(long sum, Account receiver, Account sender, string message = "")
         {
             return new Transaction(DateTime.Now.Ticks, sum, receiver, sender, message);
         }
 
         public long Id { get; }
-        public decimal Sum { get; }
+        public long Sum { get; }
         public string Message { get; }
         public Account Receiver { get; }
         public Account Sender { get; }
         private bool _executed;
 
-        public Transaction(long id, decimal sum, Account receiver, Account sender, string message = "")
+        public Transaction(long id, long sum, Account receiver, Account sender, string message = "")
         {
             Id = id;
             Sum = sum;

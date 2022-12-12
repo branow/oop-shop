@@ -56,14 +56,14 @@ namespace Shop.Controllers.Stages
         private void CreateProduct(Session session)
         {
             string name, description;
-            decimal price;
+            long price;
             int categoryId;
             Console.Write("Type name of product -> ");
             name = Console.ReadLine();
             Console.Write("Type category number " + GetCategories() + " -> ");
             categoryId = int.Parse(Console.ReadLine());
             Console.Write("Type price of product int grn -> ");
-            price = decimal.Parse(Console.ReadLine()) * 100;
+            price = long.Parse(Console.ReadLine()) * 100;
             Console.Write("Type desctiption of product -> ");
             description = Console.ReadLine();
             if (name == null || categoryId <= 0 || categoryId > Product.Categories.Count)
@@ -154,7 +154,7 @@ namespace Shop.Controllers.Stages
             Console.Write("Type number of bank card -> ");
             Console.ReadLine();
             Console.Write("Type amount of money -> ");
-            decimal sum = decimal.Parse(Console.ReadLine()) * 100;
+            long sum = long.Parse(Console.ReadLine()) * 100;
             new Operation().Replenishment(session.Account, sum);
             session.Respond = "replanishment was successful";
         }

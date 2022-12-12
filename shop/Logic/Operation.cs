@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Shop.Logic.Data.Tables;
 
 namespace Shop.Logic
@@ -21,10 +23,18 @@ namespace Shop.Logic
             new ProductTable().Remove(product.Id);
         }
 
-        public void Replenishment(Account receiver, decimal sum)
+        public void Replenishment(Account receiver, long sum)
         {
             AccountTable at = new AccountTable();
-            Account bank = new Account(-666, "bank", "****", "****", sum, new List<string>(), true);
+            AccountDTO account = new AccountDTO();
+            account.Id = -666;
+            account.Name = "bank";
+            account.Email = "****";
+            account.Password = "****";
+            account.Access = true;
+            account.Balance = sum;
+            account.History = new List<string>();
+            Account bank = new Account(account);
             Transaction transaction = Transaction.newTransaction(sum, receiver, bank, "Account replenishment");
             transaction.Execute();
             at.Update(receiver);

@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Shop.Logic.Data.Tables
 {
@@ -24,12 +25,22 @@ namespace Shop.Logic.Data.Tables
 
         public Account Create(string name, string email, string password)
         {
-            Account temp = new Account(-1, name, email, password, true);
+            AccountDTO account = new AccountDTO();
+            account.Id = -1;
+            account.Name = name;
+            account.Email = email;
+            account.Password = password;
+            account.Access = true;
+            account.Balance = 0;
+            account.History = new List<string>();
+            Account temp = new Account(account);
             temp.Close();
             int id = Insert(name, temp.Email, temp.Password, temp.Balance, temp.History);
-            Account account = new Account(id, name, email, password, false);
-            account.Open(password);
-            return account;
+            account.Id = id;
+            account.Access = false;
+            Account ac = new Account(account);
+            ac.Open(password);
+            return ac;
         }
 
         public List<Account> Get()
@@ -38,9 +49,15 @@ namespace Shop.Logic.Data.Tables
             MySqlDataReader reader = Select();
             while (reader.Read())
             {
-                Account account = new Account(reader.GetInt32(s_id), reader.GetString(s_name), reader.GetString(s_email),
-                        reader.GetString(s_password), reader.GetDecimal(s_balance), StringToList(reader.GetString(s_history)));
-                list.Add(account);
+                AccountDTO account = new AccountDTO();
+                account.Id = reader.GetInt32(s_id);
+                account.Name = reader.GetString(s_name);
+                account.Email = reader.GetString(s_email);
+                account.Password = reader.GetString(s_password);
+                account.Access = false;
+                account.Balance = reader.GetInt64(s_balance);
+                account.History = StringToList(reader.GetString(s_history));
+                list.Add(new Account(account));
             }
             reader.Close();
             return list;
@@ -50,10 +67,17 @@ namespace Shop.Logic.Data.Tables
         {
             MySqlDataReader reader = Select(new Condition(new DataField(s_id, id)));
             reader.Read();
-            Account account = new Account(reader.GetInt32(s_id), reader.GetString(s_name), reader.GetString(s_email),
-                        reader.GetString(s_password), reader.GetDecimal(s_balance), StringToList(reader.GetString(s_history)));
+            AccountDTO account = new AccountDTO();
+            account.Id = reader.GetInt32(s_id);
+            account.Name = reader.GetString(s_name);
+            account.Email = reader.GetString(s_email);
+            account.Password = reader.GetString(s_password);
+            account.Access = false;
+            account.Balance = reader.GetInt64(s_balance);
+            account.History = StringToList(reader.GetString(s_history));
+            Account ac = new Account(account);
             reader.Close();
-            return account;
+            return ac;
         }
 
         public Account Get(string name)
@@ -66,9 +90,16 @@ namespace Shop.Logic.Data.Tables
                     return null;
                 };
                 reader.Read();
-                Account account = new Account(reader.GetInt32(s_id), reader.GetString(s_name), reader.GetString(s_email),
-                        reader.GetString(s_password), reader.GetDecimal(s_balance), StringToList(reader.GetString(s_history)));
-                return account;
+                AccountDTO account = new AccountDTO();
+                account.Id = reader.GetInt32(s_id);
+                account.Name = reader.GetString(s_name);
+                account.Email = reader.GetString(s_email);
+                account.Password = reader.GetString(s_password);
+                account.Access = false;
+                account.Balance = reader.GetInt64(s_balance);
+                account.History = StringToList(reader.GetString(s_history));
+                Account ac = new Account(account);
+                return ac;
             }
             catch (MySqlException e)
             {
