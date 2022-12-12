@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic.Data
 {
-    class Condition
+    public class Condition
     {
         public DataField[] Fields { get; set; }
         public string Operator { get; set; }

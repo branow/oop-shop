@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic.Data.Tables
 {
-    internal class CategoryTable : Table
+    public class CategoryTable : Table
     {
 
         private static readonly string s_table = "categories", s_id = "category_id", s_name = "category_name";

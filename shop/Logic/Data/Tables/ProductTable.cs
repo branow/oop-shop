@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic.Data.Tables
 {
-    class ProductTable : Table
+    public class ProductTable : Table
     {
 
         private static readonly string s_table = "products", s_id = "product_id", s_name = "product_name",

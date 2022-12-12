@@ -2,7 +2,7 @@
 
 namespace Shop.Logic.Data
 {
-    class Table
+    public class Table
     {
 
         protected int Id { get; set; }

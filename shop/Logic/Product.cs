@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Shop.Logic
 {
     
-    class Product
+    public class Product
     {
         public static readonly List<string> Categories = new CategoryTable().Get();
         public int Id { get; }
@@ -71,7 +71,10 @@ namespace Shop.Logic
             return Id == o.Id;
         }
 
-
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

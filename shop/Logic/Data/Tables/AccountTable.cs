@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic.Data.Tables
 {
-    class AccountTable : Table
+    public class AccountTable : Table
     {
 
         private static readonly string s_table = "accounts", s_id = "account_id", s_name = "account_name",

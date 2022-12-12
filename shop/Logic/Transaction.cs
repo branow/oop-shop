@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Logic
 {
-    class Transaction
+    public class Transaction
     {
         public static Transaction newTransaction(decimal sum, Account receiver, Account sender, string message = "")
         {

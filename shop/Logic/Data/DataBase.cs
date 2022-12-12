@@ -2,7 +2,7 @@
 
 namespace Shop.Logic.Data
 {
-    class DataBase
+    public class DataBase
     {
         private static string s_config = "server=localhost;port=3306;username=useroot;password=root;database=shop";
         private static readonly MySqlConnection s_connection = new MySqlConnection(s_config);

@@ -7,7 +7,7 @@ using Shop.Logic.Data.Tables;
 
 namespace Shop.Logic
 {
-    class Operation
+    public class Operation
     {
 
         public void Buy(Account buyer, Product product)

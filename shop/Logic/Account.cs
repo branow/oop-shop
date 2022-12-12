@@ -2,7 +2,7 @@
 
 namespace Shop.Logic
 {
-    class Account
+    public class Account
     {
         public int Id { get; }
         public string Name
@@ -100,18 +100,16 @@ namespace Shop.Logic
         public bool Open(string password)
         {
             if (IsAccess) return true;
-            if (!Hash(password).Equals(Password)) return false;
+            if (!new Hash(password).GetHash().Equals(Password)) return false;
             _access = true;
             Password = password;
-            Email = Decode(Email, password);
             return _access;
         }
 
         public bool Close()
         {
             if (!IsAccess) return true;
-            Email = Code(Email, Password);
-            Password = Hash(Password);
+            Password = new Hash(Password).GetHash();
             _access = false;
             return true;
         }
@@ -136,68 +134,15 @@ namespace Shop.Logic
             return Id == o.Id;
         }
 
-        private string Hash(string key)
-        {
-            string hash = "";
-            foreach (char c in key.ToCharArray())
-            {
-                hash += c * 11;
-            }
-            return hash;
-        }
-
-        private string Code(string value, string key)
-        {
-            string code = "";
-            foreach (char val in value.ToCharArray())
-            {
-                int valI = val;
-                foreach (char k in key.ToCharArray())
-                {
-                    int kI = k;
-                    if (kI % 2 == 0)
-                    {
-                        valI += kI / 10;
-                    }
-                    else
-                    {
-                        valI -= kI / 10;
-                    }
-                }
-                code += valI + " ";
-            }
-            return code;
-        }
-
-        private string Decode(string code, string key)
-        {
-            string value = "";
-            foreach (string cod in code.Split(" "))
-            {
-                if (cod.Equals(""))
-                    continue;
-                int codI = int.Parse(cod);
-                foreach (char k in key.ToCharArray())
-                {
-                    int kI = k;
-                    if (kI % 2 == 0)
-                    {
-                        codI -= kI / 10;
-                    }
-                    else
-                    {
-                        codI += kI / 10;
-                    }
-                }
-                value += (char)codI;
-            }
-            return value;
-        }
 
         private AccessViolationException AccessError()
         {
             return new AccessViolationException("Firstly you have to get access for this account");
         }
 
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
